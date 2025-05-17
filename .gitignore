@@ -1,0 +1,7 @@
+hemlarm/
+instance/
+bridge.py
+*.o
+*.pyc
+__pycache__/
+build*/
