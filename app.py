@@ -69,7 +69,7 @@ def home():
 
 
     return render_template_string('''
-        <h1>MQTT Sensor Dashboard</h1>
+        <h1>Sensor Alarm Dashboard</h1>
 
         <div id="distance-alert" style="padding: 12px; font-size: 18px; font-weight: bold; color: white; border-radius: 8px; margin-bottom: 20px;">
             Distance Status: <span id="latest-distance">{{ distance if distance else "--" }}</span> cm
@@ -92,23 +92,33 @@ def home():
 
 
 
-        <h2>Recent Readings</h2>
-        <table border="1" cellpadding="5">
-            <thead>
-                <tr><th>Time</th><th>Distance (cm)</th></tr>
-            </thead>
-            <tbody id="distance-table-body">
-                {% for r in readings %}
-                <tr>
-                    <td>{{ r.timestamp.strftime('%Y-%m-%d %H:%M:%S') }}</td>
-                    <td>{{ r.value }}</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+        <div style="margin-top: 100px;">
+            <h2>Recent Readings</h2>
+            <div style="display: flex; flex-wrap: wrap; gap: 20px;">
+                <!-- Table Section -->
+                <div style="flex: 1 1 300px;">
+                    <table border="1" cellpadding="5">
+                        <thead>
+                            <tr><th>Time</th><th>Distance (cm)</th></tr>
+                        </thead>
+                        <tbody id="distance-table-body">
+                            {% for r in readings %}
+                            <tr>
+                                <td>{{ r.timestamp.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+                                <td>{{ r.value }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
 
-        <h2>Distance Chart</h2>
-        <canvas id="distanceChart" width="400" height="200"></canvas>
+                <!-- Chart Section -->
+                <div style="flex: 2 1 700px; min-width: 500px;">
+                    <canvas id="distanceChart" style="width: 100%; height: 365px;"></canvas>
+                </div>
+            </div>
+        </div>
+
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
         <script>
             const ctx = document.getElementById('distanceChart').getContext('2d');
