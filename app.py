@@ -69,14 +69,14 @@ def home():
 
 
     return render_template_string('''
-        <h1>Sensor Alarm Dashboard</h1>
+        <h1 style="text-align: center; margin-bottom: 20px;">Sensor Alarm Dashboard</h1>
 
-        <div id="distance-alert" style="padding: 12px; font-size: 18px; font-weight: bold; color: white; border-radius: 8px; margin-bottom: 20px;">
+        <div id="distance-alert" style="padding: 12px; font-size: 18px; font-weight: bold; color: white; border-radius: 8px; margin-bottom: 20px; text-align: center;">
             Distance Status: <span id="latest-distance">{{ distance if distance else "--" }}</span> cm
         </div>
 
         <!-- Alarm / Status Row -->
-        <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 20px; margin: 20px 0;">
+        <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 20px; margin: 40px 0 20px;">
             <!-- Alarm toggle + status -->
             <div style="display: flex; align-items: center; gap: 10px;">
                 <button id="toggle-alarm" style="padding: 10px; font-size: 16px; border: none; border-radius: 6px;">Loading...</button>
@@ -84,10 +84,13 @@ def home():
             </div>
 
             <!-- Pico W connection status -->
-            <div id="pico-status" style="font-size: 18px;">Loading...</div>
+            <div style="font-size: 18px; font-weight: bold;">
+                Pico Status: <span id="pico-status" style="font-weight: normal;">Loading...</span>
+            </div>
+
 
             <!-- Alarm History link -->
-            <a href="/alarm-history" style="font-size: 16px; text-decoration: none; color: #663399;">View Alarm History</a>
+            <a href="/alarm-history" style="font-size: 16px; background-color: #6c63ff; color: white; padding: 8px 14px; border-radius: 6px; text-decoration: none;">📜 View Alarm History</a>
         </div>
 
 
@@ -97,7 +100,7 @@ def home():
             <div style="display: flex; flex-wrap: wrap; gap: 20px;">
                 <!-- Table Section -->
                 <div style="flex: 1 1 300px;">
-                    <table border="1" cellpadding="5">
+                    <table border="1" cellpadding="5" style="font-weight: bold;">
                         <thead>
                             <tr><th>Time</th><th>Distance (cm)</th></tr>
                         </thead>
@@ -114,7 +117,7 @@ def home():
 
                 <!-- Chart Section -->
                 <div style="flex: 2 1 700px; min-width: 500px;">
-                    <canvas id="distanceChart" style="width: 100%; height: 365px;"></canvas>
+                    <canvas id="distanceChart" style="width: 100%; height: 365px; border: 3px solid black; border-radius: 8px;"></canvas>
                 </div>
             </div>
         </div>
@@ -136,8 +139,21 @@ def home():
                     }]
                 },
                 options: {
+                    plugins: {
+                        legend: {
+                            labels: {
+                                font: { weight: 'bold' }
+                            }
+                        }
+                    },
                     scales: {
-                        y: { beginAtZero: true }
+                        x: {
+                            ticks: { font: { weight: 'bold' } }
+                        },
+                        y: {
+                            beginAtZero: true,
+                            ticks: { font: { weight: 'bold' } }
+                        }
                     }
                 }
             });
@@ -193,12 +209,12 @@ def home():
                         const toggleBtn = document.getElementById("toggle-alarm");
 
                         if (data.enabled) {
-                            alarmStatus.textContent = "🔔 Alarm is ON";
+                            alarmStatus.textContent = "🔔 Alarm ON";
                             toggleBtn.textContent = "🔕 Disable Alarm";
                             toggleBtn.style.backgroundColor = "#dc3545";
                             toggleBtn.style.color = "white";
                         } else {
-                            alarmStatus.textContent = "🔕 Alarm is OFF";
+                            alarmStatus.textContent = "🔕 Alarm OFF";
                             toggleBtn.textContent = "🔔 Enable Alarm";
                             toggleBtn.style.backgroundColor = "#28a745";
                             toggleBtn.style.color = "white";
@@ -226,13 +242,13 @@ def home():
                         const status = data.status;
 
                         if (status === 'online') {
-                            statusSpan.textContent = "📶 Connected";
+                            statusSpan.textContent = "📶 CONNECTED";
                             statusSpan.style.color = "green";
                         } else if (status === 'offline') {
-                            statusSpan.textContent = "🔌 Disconnected";
+                            statusSpan.textContent = "🔌 DISCONNECTED";
                             statusSpan.style.color = "red";
                         } else {
-                            statusSpan.textContent = "❔ Unknown";
+                            statusSpan.textContent = "❔ UNKNOWN";
                             statusSpan.style.color = "gray";
                         }
                     });
@@ -297,6 +313,19 @@ def get_alarm_state():
 def alarm_history():
     events = AlarmEvent.query.order_by(AlarmEvent.timestamp.desc()).limit(50).all()
     return render_template_string('''
+        <p>
+            <a href="/" style="
+                display: inline-block;
+                padding: 10px 20px;
+                font-size: 16px;
+                font-weight: bold;
+                color: white;
+                background-color: #007BFF;
+                text-decoration: none;
+                border-radius: 6px;
+                margin-top: 20px;
+            ">🏠 Home</a>
+        </p>
         <h1>📜 Alarm Event History</h1>
         <table border="1" cellpadding="5">
             <thead>
@@ -312,7 +341,6 @@ def alarm_history():
                 {% endfor %}
             </tbody>
         </table>
-        <p><a href="/">← Back to Dashboard</a></p>
     ''', events=events)
 
 @app.route('/pico/status')
