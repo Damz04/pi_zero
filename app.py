@@ -69,6 +69,32 @@ def home():
 
 
     return render_template_string('''
+        <style>
+            table {
+                border-collapse: collapse;
+                width: 100%;
+                font-weight: bold;
+                border-radius: 10px;
+                overflow: hidden;
+                border: 2px solid black;
+            }
+
+            table th, table td {
+                border: 1px solid black;
+                padding: 8px;
+                text-align: left;
+                width: 150px;
+            }
+
+            table thead {
+                background-color: #f2f2f2;
+            }
+
+            table tbody tr:nth-child(even) {
+                background-color: #f9f9f9;
+            }
+        </style>
+
         <h1 style="text-align: center; margin-bottom: 20px;">Sensor Alarm Dashboard</h1>
 
         <div id="distance-alert" style="padding: 12px; font-size: 18px; font-weight: bold; color: white; border-radius: 8px; margin-bottom: 20px; text-align: center;">
@@ -93,22 +119,23 @@ def home():
             <a href="/alarm-history" style="font-size: 16px; background-color: #6c63ff; color: white; padding: 8px 14px; border-radius: 6px; text-decoration: none;">📜 View Alarm History</a>
         </div>
 
-
-
         <div style="margin-top: 100px;">
             <h2>Recent Readings</h2>
-            <div style="display: flex; flex-wrap: wrap; gap: 20px;">
+            <div style="display: flex; flex-wrap: wrap; gap: 50px;">
                 <!-- Table Section -->
-                <div style="flex: 1 1 300px;">
-                    <table border="1" cellpadding="5" style="font-weight: bold;">
+                <div style="flex: 1 1 300px; max-width: 340px; border: 3px solid black; border-radius: 10px; overflow: hidden;">
+                    <table style="width: 100%; border-collapse: collapse; font-weight: bold;">
                         <thead>
-                            <tr><th>Time</th><th>Distance (cm)</th></tr>
+                            <tr style="background-color: #f0f0f0;">
+                                <th style="border-bottom: 2px solid black; padding: 10px; text-align: left;">Time</th>
+                                <th style="border-bottom: 2px solid black; padding: 10px; text-align: left;">Distance (cm)</th>
+                            </tr>
                         </thead>
                         <tbody id="distance-table-body">
                             {% for r in readings %}
                             <tr>
-                                <td>{{ r.timestamp.strftime('%Y-%m-%d %H:%M:%S') }}</td>
-                                <td>{{ r.value }}</td>
+                                <td style="padding: 8px; border-bottom: 1px solid #ccc;">{{ r.timestamp.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+                                <td style="padding: 8px; border-bottom: 1px solid #ccc;">{{ r.value }}</td>
                             </tr>
                             {% endfor %}
                         </tbody>
@@ -116,8 +143,8 @@ def home():
                 </div>
 
                 <!-- Chart Section -->
-                <div style="flex: 2 1 700px; min-width: 500px;">
-                    <canvas id="distanceChart" style="width: 100%; height: 365px; border: 3px solid black; border-radius: 8px;"></canvas>
+                <div style="flex: 2 1 700px; min-width: 450px;">
+                    <canvas id="distanceChart" style="width: 100%; height: 400px; border: 3px solid black; border-radius: 8px;"></canvas>
                 </div>
             </div>
         </div>
