@@ -75,16 +75,22 @@ def home():
             Distance Status: <span id="latest-distance">{{ distance if distance else "--" }}</span> cm
         </div>
 
-        <div style="margin: 10px 0; font-size: 18px;">
-            Pico W Status:
-            <span id="pico-status">Loading...</span>
+        <!-- Alarm / Status Row -->
+        <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 20px; margin: 20px 0;">
+            <!-- Alarm toggle + status -->
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <button id="toggle-alarm" style="padding: 10px; font-size: 16px; border: none; border-radius: 6px;">Loading...</button>
+                <div id="alarm-status" style="font-size: 18px;">Loading...</div>
+            </div>
+
+            <!-- Pico W connection status -->
+            <div id="pico-status" style="font-size: 18px;">Loading...</div>
+
+            <!-- Alarm History link -->
+            <a href="/alarm-history" style="font-size: 16px; text-decoration: none; color: #663399;">View Alarm History</a>
         </div>
 
 
-        <h2>Alarm Control</h2>
-	<div id="alarm-status" style="font-size: 18px; margin: 10px 0;"></div>
-	<button id="toggle-alarm" style="padding: 10px; font-size: 16px; border: none; border-radius: 6px;">Loading...</button>
-        <p><a href="/alarm-history">📜 View Alarm History</a></p>
 
         <h2>Recent Readings</h2>
         <table border="1" cellpadding="5">
@@ -182,7 +188,7 @@ def home():
                             toggleBtn.style.backgroundColor = "#dc3545";
                             toggleBtn.style.color = "white";
                         } else {
-                            alarmStatus.textContent = "�� Alarm is OFF";
+                            alarmStatus.textContent = "🔕 Alarm is OFF";
                             toggleBtn.textContent = "🔔 Enable Alarm";
                             toggleBtn.style.backgroundColor = "#28a745";
                             toggleBtn.style.color = "white";
