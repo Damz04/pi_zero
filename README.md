@@ -27,7 +27,7 @@ sensor-alarm-dashboard/
 
 - 🔔 **Alarm Logic**  
   - The alarm is triggered when objects are too close (e.g. under 20 cm).
-  - Sends a **Pushover notification** (optional).
+  - Sends a **Pushover notification**.
   - The alarm can be toggled via the dashboard.
 
 - 🔁 **Device Sync**  
